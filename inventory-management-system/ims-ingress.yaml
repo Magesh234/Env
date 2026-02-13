@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ims-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"   # or "nginx" depending on your ingress controller
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - ims.wekeza.space
+    secretName: ims-tls
+  rules:
+  - host: ims.wekeza.space
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ims-website-service
+            port:
+              number: 80
